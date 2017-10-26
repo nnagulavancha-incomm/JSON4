@@ -21,21 +21,27 @@ struct Course: Decodable{
     let imageUrl:String
 }
 
+struct WebSite: Decodable {
+    let name: String
+    let description: String
+    let courses: [Course]
+}
+
 class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        guard let url = URL(string: singleCourse) else {return}
+        guard let fJson = URL(string: fullJson) else {return}
         
-        URLSession.shared.dataTask(with: url){
+        URLSession.shared.dataTask(with: fJson){
             (data, response, error) in
             
             guard let data = data else {return}
             
             do {
-                let course = try JSONDecoder().decode(Course.self, from: data)
-                print(course)
+                let fullJson = try JSONDecoder().decode(WebSite.self, from: data)
+                print(fullJson.description)
             }
             catch let error {
                 print(error)
@@ -47,7 +53,7 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }
 
